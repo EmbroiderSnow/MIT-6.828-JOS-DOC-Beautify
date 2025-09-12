@@ -440,82 +440,9 @@ li {
   margin: 0.5rem 0;
 }
 
-/* 现代化导航栏 */
+/* 隐藏右上角导航栏 - 根据用户要求删除 Sections, Exercises 组件 */
 .jump-hdr {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-light);
-  border-radius: var(--border-radius-xl);
-  padding: 0.75rem;
-  box-shadow: var(--shadow-xl);
-  z-index: 1000;
-  transition: all var(--transition-normal);
-  max-width: 300px;
-}
-
-.jump-hdr:hover {
-  background: rgba(255, 255, 255, 0.98);
-  transform: translateY(-2px);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-}
-
-.jump-hdr div.jump-section {
-  display: inline-block;
-  position: relative;
-  margin-right: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  border-radius: var(--border-radius-md);
-  transition: all var(--transition-fast);
-  color: var(--text-primary);
-  font-size: 0.9rem;
-}
-
-.jump-hdr div.jump-section:hover {
-  background: var(--primary-color);
-  color: var(--text-inverse);
-  transform: translateY(-1px);
-}
-
-.jump-hdr div.jump-section div.jump-drop {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: var(--bg-primary);
-  padding: 0.75rem;
-  border-radius: var(--border-radius-lg);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-xl);
-  min-width: 250px;
-  margin-top: 0.5rem;
-  z-index: 1001;
-}
-
-.jump-hdr div.jump-section:hover div.jump-drop {
-  display: block;
-  animation: fadeInUp 0.2s ease-out;
-}
-
-.jump-hdr div.jump-section div.jump-drop > * {
-  display: block;
-  white-space: nowrap;
-  padding: 0.5rem 0.75rem;
-  margin: 0.25rem 0;
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-fast);
-  color: var(--text-secondary);
-  text-decoration: none;
-}
-
-.jump-hdr div.jump-section div.jump-drop > *:hover {
-  background: var(--bg-secondary);
-  color: var(--primary-color);
-  transform: translateX(4px);
+  display: none !important;
 }
 
 /* 动画 */
