@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面 - 语法高亮和按钮修复</title>
+    
+    <!-- 现代化增强样式 -->
+    <link rel="stylesheet" href="labs-modern.css" type="text/css">
+    
+    <!-- 增强功能脚本 -->
+    <script src="labs-enhance.js"></script>
+</head>
+<body>
+    <main id="main-content">
+        <h1>测试页面</h1>
+        <p>测试字符编码和语法高亮功能是否正常工作。</p>
+
+        <div class="required">
+            <p><span class="header">Exercise 2.</span>
+            Use GDB's <code>si</code> (Step Instruction) command to trace into the ROM BIOS for a few more instructions, and try to guess what it might be doing.
+            You might want to look at Phil Storrs I/O Ports Description, as well as other materials on the 6.828 reference materials page. No need to figure
+            out all the details - just the general idea of what the BIOS is doing first.
+            </p>
+        </div>
+
+        <h3>Shell命令示例</h3>
+        <pre><code>athena% mkdir ~/6.828
+athena% cd ~/6.828
+athena% add git
+athena% git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab
+Cloning into lab...
+athena% cd lab</code></pre>
+
+        <h3>C语言代码示例</h3>
+        <pre><code>#include <stdio.h>
+#include <inc/x86.h>
+
+int main() {
+    printf("Hello, World!\n");
+    return 0;
+}
+
+/**
+ * 简单的ELF加载器函数
+ */
+static void
+readseg(uchar* pa, uint count, uint offset)
+{
+    uchar* epa;
+    
+    epa = pa + count;
+    
+    // round down to sector boundary
+    pa -= offset % SECTSIZE;
+    
+    // translate from bytes to sectors, and kernel starts at sector 1
+    offset = (offset / SECTSIZE) + 1;
+}</code></pre>
+
+        <h3>CSS样式示例</h3>
+        <pre><code>/* 现代化按钮样式 */
+.code-copy-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #6b7280;
+    color: var(--text-inverse);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: all 0.2s ease;
+}
+
+.code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #9ca3af;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .code-copy-btn {
+        font-size: 0.6rem;
+        padding: 0.2rem 0.4rem;
+    }
+}</code></pre>
+
+        <h3>汇编代码示例</h3>
+        <pre><code>.globl _start
+_start:
+    # 切换到保护模式
+    lgdt gdtdesc
+    movl %cr0, %eax
+    orl $CR0_PE_ON, %eax
+    movl %eax, %cr0
+    
+    # 跳转到下一条指令，但在32位代码段中
+    ljmp $(SEG_KCODE<<3), $protcseg
+
+protcseg:
+    # 设置保护模式数据段寄存器
+    movw $(SEG_KDATA<<3), %ax
+    movw %ax, %ds
+    movw %ax, %es
+    movw %ax, %fs
+    movw %ax, %gs
+    movw %ax, %ss</code></pre>
+
+    </main>
+</body>
+</html>
