@@ -228,6 +228,22 @@
         enhanceCodeBlock(pre) {
             if (pre.hasAttribute('data-enhanced')) return;
 
+            // 如果pre标签内已经有kbd标签，我们只进行包装，不进行语法高亮
+            if (pre.querySelector('kbd')) {
+                const wrapper = Utils.createElement('div', 'code-block-wrapper');
+                const header = this.createCodeHeader('shell', pre.textContent); // 语言设为shell
+                
+                // 保留原始的pre及其内部的kbd标签
+                const preClone = pre.cloneNode(true);
+                preClone.setAttribute('data-enhanced', 'true');
+                
+                wrapper.appendChild(header);
+                wrapper.appendChild(preClone);
+                
+                pre.parentNode.replaceChild(wrapper, pre);
+                return; // 结束此函数的执行
+            }
+
             const code = pre.querySelector('code') || pre;
             const originalCode = code.textContent;
             const language = this.detectLanguage(originalCode);
