@@ -43,11 +43,12 @@
             atRules: /@[a-zA-Z-]+/g
         },
         assembly: {
-            instructions: /\b(mov|add|sub|mul|div|push|pop|call|ret|jmp|je|jne|jz|jnz|cmp|test|lea|int|nop|hlt)\b/gi,
-            registers: /\b([er]?[abcd]x|[er]?[sb]p|[er]?[sd]i|r[8-9]|r1[0-5]|[abcd][lh]|[ds]il|[ds]pl|cs|ds|es|fs|gs|ss)\b/gi,
-            numbers: /\b0x[0-9a-fA-F]+\b|\b\d+\b/g,
-            labels: /^\s*\w+:/gm,
-            comments: /(;.*$|\/\*[\s\S]*?\*\/|\/\/.*$)/gm
+            address: /^\[[\w:]+\]\s+0x[0-9a-fA-F]+:\s*/g,
+            instructions: /\b(mov|add|sub|mul|div|push|pop|call|ret|jmp|ljmp|je|jne|jz|jnz|cmp|test|lea|int|nop|hlt|lgdt|orl|movl|movw)\b/gi,
+            registers: /%([er]?[abcd]x|[er]?[sb]p|[er]?[sd]i|r[8-9]|r1[0-5]|[abcd][lh]|[ds]il|[ds]pl|cr0|cs|ds|es|fs|gs|ss)\b/gi,
+            numbers: /\b0x[0-9a-fA-F]+\b|\b\d+\b|\$[0-9a-fA-F,x]+/g,
+            labels: /^\s*[\w.]+:/gm,
+            comments: /(;.*$|\/\*[\s\S]*?\*\/|\/\/.*$|#.*$)/gm
         },
         shell: {
             commands: /\b(ls|cd|mkdir|rm|cp|mv|grep|find|cat|echo|pwd|chmod|chown|sudo|ssh|git|make|gcc|gdb|objdump|readelf|hexdump|qemu)\b/g,
@@ -69,6 +70,7 @@
             variable: '#e36209',
             operator: '#d73a49',
             preprocessor: '#735c0f',
+            address: '#6a737d',
             selector: '#6f42c1',
             property: '#005cc5',
             value: '#e36209',
@@ -86,6 +88,7 @@
             variable: '#ffab70',
             operator: '#f97583',
             preprocessor: '#e1e4e8',
+            address: '#8b949e',
             selector: '#b392f0',
             property: '#79b8ff',
             value: '#ffab70',
@@ -143,10 +146,12 @@
             if (/^\s*#include|void\s+\w+\s*\(|int\s+main\s*\(/m.test(code)) {
                 return 'c';
             }
-            if (/^\s*[a-zA-Z_]\w*:/m.test(code) || /\b(mov|push|pop|call|ret)\b/i.test(code)) {
+            // 增强的汇编检测规则：检查标签、常见指令或寄存器格式
+            if (/^\s*[\w.]+:/m.test(code) || /\b(mov|push|pop|call|ret|jmp|ljmp|lea|int)\b/i.test(code) || /%[er]?[a-z]{2}/.test(code)) {
                 return 'assembly';
             }
-            if (/^\s*[a-zA-Z_]\w*\s*%|\$\s*|athena%/m.test(code)) {
+            // 调整shell检测，避免与汇编冲突
+            if (/^\s*[\w-]+\s*%|\$\s*|athena%/m.test(code)) {
                 return 'shell';
             }
             if (/^\s*\/\*[\s\S]*?\*\/|[.#]?[a-zA-Z_-][\w-]*\s*{|@[a-zA-Z-]+|\b(background|color|font|margin|padding|width|height|display)\s*:/m.test(code)) {
